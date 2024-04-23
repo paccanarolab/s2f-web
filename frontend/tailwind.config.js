@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./base/jinja2/**/*.{html,js}"],
-  content: ["./jinja2/**/*.{html,js}"],
+  content: ["./base/jinja2/**/*.{html,js}",
+            "./jinja2/**/*.{html,js}"],
   theme: {
     extend: {},
   },

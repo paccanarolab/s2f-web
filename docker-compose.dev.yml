@@ -23,7 +23,7 @@ services:
       s2f-front-db:
         condition: service_healthy
   s2f-front-db:
-    image: postgres:16.2-alpine
+    image: postgres:15.6-alpine
     ports:
       - 5432:5432
     healthcheck:
@@ -51,7 +51,7 @@ services:
   # Back end
   # s2f-back:
   #   build: 
-  #     context: ./backend
+  #     context: ./polling-backend
   #     dockerfile: Dockerfile.prod
   #   command: python poll_front.py
   #   # uncomment these to access the app directly for test purposes, 
@@ -64,7 +64,7 @@ services:
   #     s2f-back-db:
   #       condition: service_healthy
   # s2f-back-db:
-  #   image: postgres:16.2-alpine
+  #   image: postgres:16.6-alpine
   #   ports:
   #     - 5433:5432
   #   healthcheck:

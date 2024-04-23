@@ -25,7 +25,7 @@ class Job(models.Model):
 
 
 class JobEvent(models.Model):
-    job = models.ForeignKey(Job)
+    job = models.ForeignKey(Job, on_delete=models.CASCADE)
     status = models.TextField(max_length=2,
                               choices=Status,
                               default=Status.CREATED)
