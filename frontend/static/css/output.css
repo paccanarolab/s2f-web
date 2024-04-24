@@ -1468,6 +1468,10 @@ select {
   font-weight: 600;
 }
 
+.italic {
+  font-style: italic;
+}
+
 .leading-tight {
   line-height: 1.25;
 }
