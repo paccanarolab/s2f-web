@@ -1,0 +1,99 @@
+{% import 'base/components/nav-links.html' as nav %}
+{% extends 'base.html' %}
+
+{% block nav %}
+    {{ nav.nav_links(active) }}
+{% endblock %}
+
+{% block nav_mobile %}
+    {{ nav.nav_links(active) }}
+{% endblock %}
+
+{% block header %}
+    <img class="h-40 w-auto mx-auto" src='{{ static("img/s2f-logo.svg") }}' alt="S2F">
+    <h1 class="text-center text-3xl font-bold leading-tight tracking-tight text-gray-900">
+        S2F-web OVERWRITE
+    </h1>
+    <h2 class="text-center text-2xl leading-tight tracking-tight text-gray-900">
+        Protein Function Prediction for newly sequenced organisms
+    </h2>
+{% endblock %}
+
+{% block content %}
+<div class="pt-20">
+    <h3 class="text-2xl font-semibold leading-6 text-gray-900">References:</h3>
+    <div class="my-10">
+        <p>
+            If you found S2F-web useful for your work or research, please let us know, and cite the following articles:
+        </p>
+        <ul role="list" class="mt-8 space-y-8 text-gray-600">
+            <li class="flex gap-x-3">
+                <svg class="mt-1 h-5 w-5 flex-none text-indigo-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+                </svg>
+                <span><strong class="font-semibold text-gray-900">Data types.</strong> Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.</span>
+            </li>
+            <li class="flex gap-x-3">
+                <svg class="mt-1 h-5 w-5 flex-none text-indigo-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+                </svg>
+                <span><strong class="font-semibold text-gray-900">Loops.</strong> Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.</span>
+            </li>
+            <li class="flex gap-x-3">
+                <svg class="mt-1 h-5 w-5 flex-none text-indigo-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+                </svg>
+                <span><strong class="font-semibold text-gray-900">Events.</strong> Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.</span>
+            </li>
+        </ul>
+    </div>
+
+    <h3 class="text-2xl font-semibold leading-6 text-gray-900">S2F-web runs the following tools</h3>
+    <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-4">
+        <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+            <dt class="truncate text-sm font-medium text-gray-500">STRING</dt>
+            <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">v12.0</dd>
+        </div>
+        <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+            <dt class="truncate text-sm font-medium text-gray-500">InterProScan</dt>
+            <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">v5.62-94.0</dd>
+        </div>
+        <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+            <dt class="truncate text-sm font-medium text-gray-500">HMMER</dt>
+            <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">v3.3.2</dd>
+        </div>
+        <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+            <dt class="truncate text-sm font-medium text-gray-500">BLAST</dt>
+            <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">v2.8.1</dd>
+        </div>
+    </dl>
+    <div class="py-24 sm:py-32">
+        <h3 class="text-2xl font-semibold leading-6 text-gray-900 pb-6">S2F-web was developed with the support of:</h3>
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+            <div class="-mx-6 grid grid-cols-2 gap-0.5 overflow-hidden sm:mx-0 sm:rounded-2xl md:grid-cols-3">
+                <div class="bg-gray-50 p-8 sm:p-10">
+                    <img class="max-h-12 w-full object-contain" src="https://tailwindui.com/img/logos/158x48/transistor-logo-gray-900.svg" alt="Transistor" width="158" height="48">
+                </div>
+                <div class="bg-gray-50 p-6 sm:p-10">
+                    <img class="max-h-12 w-full object-contain" src="https://tailwindui.com/img/logos/158x48/reform-logo-gray-900.svg" alt="Reform" width="158" height="48">
+                </div>
+                <div class="bg-gray-50 p-6 sm:p-10">
+                    <img class="max-h-12 w-full object-contain" src="https://tailwindui.com/img/logos/158x48/tuple-logo-gray-900.svg" alt="Tuple" width="158" height="48">
+                </div>
+                <div class="bg-gray-50 p-6 sm:p-10">
+                    <img class="max-h-12 w-full object-contain" src="https://tailwindui.com/img/logos/158x48/laravel-logo-gray-900.svg" alt="Laravel" width="158" height="48">
+                </div>
+                <div class="bg-gray-50 p-6 sm:p-10">
+                    <img class="max-h-12 w-full object-contain" src="https://tailwindui.com/img/logos/158x48/savvycal-logo-gray-900.svg" alt="SavvyCal" width="158" height="48">
+                </div>
+                <div class="bg-gray-50 p-6 sm:p-10">
+                    <img class="max-h-12 w-full object-contain" src="https://tailwindui.com/img/logos/158x48/statamic-logo-gray-900.svg" alt="Statamic" width="158" height="48">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+

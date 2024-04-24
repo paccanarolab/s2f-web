@@ -8,6 +8,7 @@ services:
     command: gunicorn frontend.wsgi:application --bind 0.0.0.0:80 -w 4
     volumes:
       - ./frontend/static:/home/app/staticfiles
+      - ./frontend/jinja2:/home/app/frontend/jinja2
       - ./frontend/base:/home/app/frontend/base
       - ./frontend/frontend:/home/app/frontend/frontend
       - ./data:/home/app/data
