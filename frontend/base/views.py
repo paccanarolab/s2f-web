@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponseBadRequest, HttpResponse, JsonResponse
 from django.conf import settings
 from email_validator import validate_email, EmailNotValidError
 from slugify import slugify
@@ -8,7 +8,10 @@ from base.models import Job, JobEvent, Status
 from base.services import handle_upload
 from datetime import datetime
 from pathlib import Path
+from oauth2_provider.decorators import rw_protected_resource
+from django.views.decorators.csrf import csrf_exempt
 import logging
+import json
 
 
 log = logging.getLogger("main")
@@ -86,24 +89,39 @@ def job_search(request):
     return render(request, "base/job-search.html", context)
 
 
-def job_update(request, token, status):
-    job = get_object_or_404(Job, token=token)
-    current_status = job.status
-    valid_transitions = [
-        (Status.CREATED, Status.JOINED),
-        (Status.JOINED, Status.STARTED),
-        (Status.JOINED, Status.EXPIRED),
-        (Status.STARTED, Status.FINISHED),
-        (Status.STARTED, Status.FAILED),
-    ]
+@rw_protected_resource()
+def pending_jobs(request):
+    context = {}
+    jobs = Job.objects.filter(status=Status.CREATED).values("token", "alias")
+    context["jobs"] = [j for j in jobs]
+    return JsonResponse(context)
 
-    for start, end in valid_transitions:
-        if current_status == start and status == end:
-            job.status = status
-            job.save()
-            return "done"
 
-    return "not done"
+@csrf_exempt
+@rw_protected_resource()
+def job_update(request):
+    context = {}
+    if request.method == "POST":
+        token = request.POST["token"]
+        status = request.POST["status"]
+        job = get_object_or_404(Job, token=token)
+        current = job.status
+        valid_transitions = [
+            (Status.CREATED, Status.JOINED),
+            (Status.JOINED, Status.STARTED),
+            (Status.JOINED, Status.EXPIRED),
+            (Status.STARTED, Status.FINISHED),
+            (Status.STARTED, Status.FAILED),
+        ]
+
+        for start, end in valid_transitions:
+            if current == start and status == end:
+                job.status = status
+                job.save()
+                context["message"] = "successfully changed the status"
+        if "message" not in context:
+            context["message"] = f"can't change from {current} to {status}"
+    return JsonResponse(context)
 
 
 def job(request, token):
