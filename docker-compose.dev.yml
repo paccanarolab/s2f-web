@@ -7,7 +7,8 @@ services:
       dockerfile: Dockerfile.prod
     command: gunicorn frontend.wsgi:application --bind 0.0.0.0:80 -w 4
     volumes:
-      - ./frontend/static:/home/app/staticfiles
+      - ./frontend/static:/home/app/frontend/staticfiles
+      - ./frontend/uploads:/home/app/frontend/uploads
       - ./frontend/jinja2:/home/app/frontend/jinja2
       - ./frontend/base:/home/app/frontend/base
       - ./frontend/frontend:/home/app/frontend/frontend

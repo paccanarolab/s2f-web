@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 
 **/alembic/versions/*
+**/uploads/*
 
 # Secrets
 *.secret

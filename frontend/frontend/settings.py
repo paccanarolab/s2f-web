@@ -178,7 +178,17 @@ STATIC_URL = os.environ.get("FRONT_STATIC_URL",
                             default='/s2f_frontend_static/')
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+# User uploads
+MEDIA_URL = os.environ.get("FRONT_MEDIA_URL",
+                           default='/s2f_uploads/')
+MEDIA_ROOT = BASE_DIR / 'uploads'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Login
+
+LOGIN_URL = '/admin/login/'

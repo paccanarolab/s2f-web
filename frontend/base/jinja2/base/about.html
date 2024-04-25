@@ -28,20 +28,43 @@
         </p>
         <ul role="list" class="mt-8 space-y-8 text-gray-600">
             <li class="flex gap-x-3">
-                <svg class="mt-1 h-5 w-5 flex-none text-indigo-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+                <svg class="mt-1 h-5 w-5 flex-none text-gray-900" xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                    fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                 </svg>
-                <span><strong class="font-semibold text-gray-900">Data types.</strong> Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.</span>
+
+                <span>
+                    Torres, M., and Paccanaro, A.<br>
+                    <a href="#"
+                       class="font-semibold text-indigo-600 hover:text-indigo-400">S2F-web, network-based protein function prediction</a>
+                    <span class="italic">In preparation</span>
+                    doi: 
+                    <a href="#"
+                       class="font-semibold text-indigo-600 hover:text-indigo-400">
+                        in preparation
+                    </a>
+                    
+                </span>
             </li>
             <li class="flex gap-x-3">
-                <svg class="mt-1 h-5 w-5 flex-none text-indigo-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+                <svg class="mt-1 h-5 w-5 flex-none text-gray-900" xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                    fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                 </svg>
+
                 <span>
                     Torres, M., Yang, H., Romero, A.E., and Paccanaro, A.<br>
-                    <strong class="font-semibold text-gray-900">Protein function prediction for newly sequenced organisms.</strong>
+                    <a href="http://dx.doi.org/10.1038/s42256-021-00419-7"
+                       class="font-semibold text-indigo-600 hover:text-indigo-400">Protein function prediction for newly sequenced organisms.</a>
                     <span class="italic">Nature Machine Intelligence.</span> (2021).
-                    doi: 10.1038/s42256-021-00419-7
+                    doi: 
+                    <a href="http://dx.doi.org/10.1038/s42256-021-00419-7"
+                       class="font-semibold text-indigo-600 hover:text-indigo-400">
+                        10.1038/s42256-021-00419-7
+                    </a>
+                    
                 </span>
             </li>
         </ul>
@@ -71,22 +94,13 @@
         <div class="mx-auto max-w-7xl px-6 lg:px-8">
             <div class="-mx-6 grid grid-cols-2 gap-0.5 overflow-hidden sm:mx-0 sm:rounded-2xl md:grid-cols-3">
                 <div class="bg-gray-50 p-8 sm:p-10">
-                    <img class="max-h-12 w-full object-contain" src="https://tailwindui.com/img/logos/158x48/transistor-logo-gray-900.svg" alt="Transistor" width="158" height="48">
+                    <img class="max-h-12 w-full object-contain" src='{{ static("img/fgv-logo.svg") }}' alt="FGV" width="158" height="48">
+                </div>
+                <div class="bg-gray-50 p-3 sm:p-8">
+                    <img class="max-h-20 w-full object-contain" src='{{ static("img/rhul.jpg") }}' alt="Reform" width="158" height="48">
                 </div>
                 <div class="bg-gray-50 p-6 sm:p-10">
-                    <img class="max-h-12 w-full object-contain" src="https://tailwindui.com/img/logos/158x48/reform-logo-gray-900.svg" alt="Reform" width="158" height="48">
-                </div>
-                <div class="bg-gray-50 p-6 sm:p-10">
-                    <img class="max-h-12 w-full object-contain" src="https://tailwindui.com/img/logos/158x48/tuple-logo-gray-900.svg" alt="Tuple" width="158" height="48">
-                </div>
-                <div class="bg-gray-50 p-6 sm:p-10">
-                    <img class="max-h-12 w-full object-contain" src="https://tailwindui.com/img/logos/158x48/laravel-logo-gray-900.svg" alt="Laravel" width="158" height="48">
-                </div>
-                <div class="bg-gray-50 p-6 sm:p-10">
-                    <img class="max-h-12 w-full object-contain" src="https://tailwindui.com/img/logos/158x48/savvycal-logo-gray-900.svg" alt="SavvyCal" width="158" height="48">
-                </div>
-                <div class="bg-gray-50 p-6 sm:p-10">
-                    <img class="max-h-12 w-full object-contain" src="https://tailwindui.com/img/logos/158x48/statamic-logo-gray-900.svg" alt="Statamic" width="158" height="48">
+                    <img class="max-h-12 w-full object-contain" src='{{ static("img/paccanarolab.svg") }}' alt="Tuple" width="158" height="48">
                 </div>
             </div>
         </div>
