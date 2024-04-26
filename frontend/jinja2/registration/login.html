@@ -4,7 +4,7 @@
         <div class="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
             <div class="mx-auto w-full max-w-sm lg:w-96">
                 <div>
-                    <img class="h-40 w-auto mx-auto" src="{{static('img/s2f-logo.svg')}}" alt="S2F">
+                    <img class="h-40 w-auto mx-auto" src="{{ static('img/s2f-logo.svg') }}" alt="S2F">
                     <h2 class="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account</h2>
                 </div>
 
@@ -12,6 +12,7 @@
                     <div>
                         <form  method="POST" class="space-y-6">
                             {{ csrf_input }}
+                            <input type="hidden" name="next" value="{{ next }}" />
                             <div>
                                 <label for="{{ form.username.id_for_label }}" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
                                 <div class="mt-2">
