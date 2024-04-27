@@ -125,6 +125,10 @@ def job_update(request):
             if current == start and status == end:
                 job.status = status
                 job.save()
+                event = JobEvent.objects.create(job=job,
+                                                status=status,
+                                                date=datetime.now())
+                event.save()
                 context["message"] = "successfully changed the status"
         if "message" not in context:
             context["message"] = f"can't change from {current} to {status}"
