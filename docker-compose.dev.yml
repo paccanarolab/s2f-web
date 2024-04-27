@@ -43,11 +43,13 @@ services:
     build: ./reverse-proxy
     volumes:
       - ./reverse-proxy/default.conf:/etc/nginx/conf.d/nginx.conf
+      - ./reverse-proxy/certs:/etc/nginx/ssl
       - ./frontend/static:/home/app/staticfiles
     networks:
       - s2f
     ports:
       - 80:80
+      - 443:443
     depends_on:
       - s2f-front
   # Back end

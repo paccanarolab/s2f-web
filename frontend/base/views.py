@@ -90,6 +90,13 @@ def job_search(request):
 
 
 @rw_protected_resource()
+def ping(request):
+    context = {}
+    context["message"] = "pong"
+    return JsonResponse(context)
+
+
+@rw_protected_resource()
 def pending_jobs(request):
     context = {}
     jobs = Job.objects.filter(status=Status.CREATED).values("token", "alias")

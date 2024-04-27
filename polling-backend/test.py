@@ -1,135 +1,77 @@
 from typing import Dict, List, Optional
-from datetime import datetime
-from pathlib import Path
 
-import requests
-import random
-import string
+from oauthlib.oauth2 import BackendApplicationClient, TokenExpiredError
+from requests_oauthlib import OAuth2Session
 import json
+import time
+from datetime import datetime
 
 
-API_URL = "http://localhost"
-CLIENT_ID = "U6ablNxNDpOaDtrMoqI4wfsvuYU2sfPQY0VyYT5u"
-CLIENT_SECRET = "kOHLA1aODgRWa6QSGpDfftv9IleVLpOXRTTzSlmTBYF0G8evN9R0ChR7YV9LuP5t2T6hu2gUYrwhXcwugfObSYfJf6RPBCGF0UNVUKP9jUkoOsCrc6O7RYNio1g1H8nz"
-TOKEN = ""
+API_URL = "https://localhost"
+CLIENT_ID = "yrBWkPCeWYIF25cAAO8VwaG69e8HqHmsofs9kGVy"
+CLIENT_SECRET = "0ifUtWfQtKWPliatxw2JsWbdpfSkUGKNCmJDrxJCBQQfzOx7Jr4Aymd4KDLiC31rTWCdg2LtlK720yMZUOW6XdvFihrvriNeyDd7dpQsUHx6GSePk9k3x1U9a7kzty17"
+TOKEN = {}
+CLIENT = None
+PADDING_SECONDS = 10
 
 
-def _open_request(endpoint: str,
-                  data: Optional[Dict] = None,
-                  headers: Optional[Dict] = None,
-                  method: str = "GET") -> requests.Response:
-    url = f"{API_URL}/{endpoint}"
-    if not headers:
-        headers = {"accept": "application/json"}
-    return requests.request(
-        method,
-        url,
-        headers=headers,
-        data=data,
-    )
+def _refresh_token():
+    global CLIENT, TOKEN
+    TOKEN = CLIENT.fetch_token(f"{API_URL}/o/token/",
+                               client_id=CLIENT_ID,
+                               client_secret=CLIENT_SECRET)
+    client = BackendApplicationClient(client_id=CLIENT_ID)
+    CLIENT = OAuth2Session(client=client, token=TOKEN)
+    print("refreshed token")
+    print(TOKEN)
 
 
-def _refresh_api_token() -> str:
-    global TOKEN
-    print(f"current access token: {TOKEN}\nRefreshing...")
-    data = {
-        "grant_type": "refresh_token",
-        "scope": "read write",
-        "client_id": CLIENT_ID,
-        "client_secret": CLIENT_SECRET,
-    }
-    token_data = _open_request(
-        "o/token/",
-        data=data,
-        method="POST"
-    ).json()
-    TOKEN = token_data["access_token"]
-    print(f"current access token: {TOKEN}")
-    return TOKEN
+def _ensure_authenticated():
+    try:
+        delta = TOKEN["expires_at"] - datetime.now().timestamp()
+        print(f"{delta=}")
+        if delta < PADDING_SECONDS:
+            _refresh_token()
+        r = CLIENT.get(f"{API_URL}/api/ping")
+        d = r.json()
+    except TokenExpiredError:
+        print("except")
+        _refresh_token()
+        r = CLIENT.get(f"{API_URL}/api/ping")
+        d = r.json()
+    return d["message"] == "pong"
 
 
-def _ensure_authenticated() -> None:
-    url = f"{API_URL}/o/token"
-    headers = {}
-    headers["Authorization"] = f"Bearer {TOKEN}"
-    response = requests.request(
-        "GET",
-        url,
-        headers=headers,
-    )
-    print(response)
-    _refresh_api_token()
-    if response.status_code == 401:
-        _refresh_api_token()
-
-
-def _authenticated_request(endpoint: str,
-                           data: Optional[Dict] = None,
-                           headers: Optional[Dict] = None,
-                           files: Optional[Dict] = None,
-                           method: str = "POST") -> requests.Response:
+def get_job_list() -> Dict:
     _ensure_authenticated()
-    url = f"{API_URL}/{endpoint}"
-    if not headers:
-        headers = {}
-    if "Authorization" not in headers:
-        headers["Authorization"] = f"Bearer {TOKEN}"
-    response = requests.request(
-        method,
-        url,
-        headers=headers,
-        data=data,
-        files=files
-    )
-    return response
+    r = CLIENT.get(f"{API_URL}/api/pending_jobs")
+    return r.json()
 
 
-def get_job_list():
-    print(_authenticated_request("api/pending_jobs", method="GET"))
-
-
-def get_experiment(token: str) -> Dict:
-    return _open_request(f"experiment/{token}").json()
-
-
-def get_experiment_history(token: str) -> Dict:
-    history = _open_request(f"experiment/events/{token}").json()
-    for event in history:
-        event["date_event"] = datetime.fromisoformat(event["date_event"])
-    return history
-
-
-def get_experiment_proteins(token: str) -> List:
-    return _open_request(f"experiment/proteins/{token}").json()
-
-
-def get_experiment_results(token: str, protein: str) -> List:
-    data = {"protein": protein}
-    return _open_request(
-        f"experiment/results/{token}",
-        data=data
-    ).json()
-
-
-def submit_experiment(data: Dict, files: Dict) -> Dict:
-    print(files)
-    return _authenticated_request(
-        "experiment/",
-        data=data,
-        files=files
-    ).json()
-
-
-def get_fake_proteins(n: int) -> List:
-    proteins = []
-    vocab = string.ascii_uppercase + string.digits
-    prot_len = 7
-    for _ in range(n):
-        proteins.append("".join(
-            random.choice(vocab) for _ in range(prot_len)
-        ))
-    return proteins
+def joined_job(job):
+    _ensure_authenticated()
+    r = CLIENT.post(f"{API_URL}/api/update_job_status",
+                    data={
+                        "token": job["token"],
+                        "status": "jo"
+                        })
+    print(r.text)
 
 
 if __name__ == "__main__":
-    get_job_list()
+    client = BackendApplicationClient(client_id=CLIENT_ID)
+    oauth = OAuth2Session(client=client)
+    TOKEN = oauth.fetch_token(token_url='https://localhost/o/token/',
+                              client_id=CLIENT_ID,
+                              client_secret=CLIENT_SECRET)
+    print(TOKEN)
+    print(datetime.now().timestamp())
+    CLIENT = OAuth2Session(client=client, token=TOKEN)
+    r = CLIENT.get("https://localhost/api/pending_jobs")
+
+    while True:
+        r = get_job_list()
+        for job in r["jobs"]:
+            joined_job(job)
+        print(f'[{datetime.now().strftime("%Y-%m-%d %H:%M")}]-{r}')
+        time.sleep(1)

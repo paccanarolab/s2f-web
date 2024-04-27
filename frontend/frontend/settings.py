@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get(
 DEBUG = int(os.environ.get("FRONT_DEBUG", default=1)) == 1
 
 ALLOWED_HOSTS = os.environ.get("FRONT_ALLOWED_HOSTS",
-                               default="0.0.0.0 localhost 127.0.0.1"
+                               default="0.0.0.0 localhost 127.0.0.1 mateo.dev"
                                ).split(" ")
 
 CSRF_TRUSTED_ORIGINS = os.environ.get("FRONT_CSRF_TRUSTED_ORIGINS",
@@ -196,3 +196,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/admin/login/'
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+# API CONFIG (for quick debugging of oauth)
+# OAUTH2_PROVIDER = {
+#     'ACCESS_TOKEN_EXPIRE_SECONDS': 60
+# }
