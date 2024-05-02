@@ -1,20 +1,16 @@
-from typing import Dict, List
+from typing import Dict
 from oauthlib.oauth2 import BackendApplicationClient, TokenExpiredError
 from requests_oauthlib import OAuth2Session
-import time
-import json
 from datetime import datetime
 from pathlib import Path
 
 
 API_URL = "https://localhost"
-MEDIA_ROOT = Path(__file__).parent / "experiments"
+PADDING_SECONDS = 10
 CLIENT_ID = "Nn5yWZQw5JLOF5RvXrzsOWgVieMo8VjEAin3nTzu"
 CLIENT_SECRET = "Z58yafK76EOuZearQLmK7wpRTFQ6sJVIYIxhEtpdBSJb18WKZzSAf0aI66XMxAaQFa0u8SyMJpIVPnMZ99te41DkCDKrnnNqWDFfPymSIcrw1UgBYHLuKRifqDAFWORB"
 TOKEN = {}
 CLIENT = None
-PADDING_SECONDS = 10
-JOBS = []
 
 
 def _refresh_token():
@@ -22,10 +18,9 @@ def _refresh_token():
     TOKEN = CLIENT.fetch_token(f"{API_URL}/o/token/",
                                client_id=CLIENT_ID,
                                client_secret=CLIENT_SECRET)
-    client = BackendApplicationClient(client_id=CLIENT_ID)
-    CLIENT = OAuth2Session(client=client, token=TOKEN)
+    c = BackendApplicationClient(client_id=CLIENT_ID)
+    CLIENT = OAuth2Session(client=c, token=TOKEN)
     print("refreshed token")
-    print(TOKEN)
 
 
 def _ensure_authenticated():
@@ -42,6 +37,16 @@ def _ensure_authenticated():
         r = CLIENT.get(f"{API_URL}/api/ping")
         d = r.json()
     return d["message"] == "pong"
+
+
+def init_api():
+    global CLIENT, TOKEN
+    c = BackendApplicationClient(client_id=CLIENT_ID)
+    CLIENT = OAuth2Session(client=c)
+    TOKEN = CLIENT.fetch_token(token_url='https://localhost/o/token/',
+                               client_id=CLIENT_ID,
+                               client_secret=CLIENT_SECRET)
+    CLIENT = OAuth2Session(client=c, token=TOKEN)
 
 
 def get_job_list() -> Dict:
@@ -79,46 +84,3 @@ def joined_job(job):
                         "status": "jo"
                         })
     print(r.text)
-
-
-def create_job_directory(job):
-    directory = MEDIA_ROOT / job["token"]
-    directory.mkdir(exist_ok=True)
-    metadata = directory / "info.json"
-    with metadata.open("w") as meta:
-        json.dump(job, meta)
-    download_fasta_file(job, directory)
-
-
-def load_job_metas(directory: Path) -> List:
-    jobs = []
-    for job_dir in directory.iterdir():
-        meta_json = job_dir / "meta.json"
-        if meta_json.exists():
-            with meta_json.open() as mj:
-                jobs.append(json.load(mj))
-    return jobs
-
-
-if __name__ == "__main__":
-    client = BackendApplicationClient(client_id=CLIENT_ID)
-    oauth = OAuth2Session(client=client)
-    TOKEN = oauth.fetch_token(token_url='https://localhost/o/token/',
-                              client_id=CLIENT_ID,
-                              client_secret=CLIENT_SECRET)
-    print(TOKEN)
-    print(datetime.now().timestamp())
-    CLIENT = OAuth2Session(client=client, token=TOKEN)
-    r = CLIENT.get("https://localhost/api/pending_jobs")
-    JOBS = load_job_metas(MEDIA_ROOT)
-
-    while True:
-        r = get_job_list()
-        for job in r["jobs"]:
-            JOBS.append(job)
-            create_job_directory(job)
-            joined_job(job)
-        print(f'[{datetime.now().strftime("%Y-%m-%d %H:%M")}]-{r}')
-        for job in JOBS:
-            print(job)
-        time.sleep(10)

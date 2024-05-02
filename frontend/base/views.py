@@ -164,7 +164,9 @@ def job_update(request):
     if request.method == "POST":
         token = request.POST["token"]
         status = request.POST["status"]
-        job = get_job_or_json404(token)
+        success, job = get_job_or_json404(token)
+        if not success:
+            return job
         current = job.status
         valid_transitions = [
             (Status.CREATED, Status.JOINED),

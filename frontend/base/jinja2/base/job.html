@@ -54,7 +54,7 @@
         <div class="mt-4 flex w-full flex-none gap-x-4 border-t border-gray-900/5 px-6 pt-6">
             <span class="text-sm font-semibold leading-6 text-gray-900">Permalink</span>
         </div>
-        {% for event in job.jobevent_set.all() %}
+        {% for event in job.jobevent_set.order_by("-date").all() %}
         <dl class="flex flex-wrap">
             <div class="mt-4 flex w-full flex-none gap-x-4 border-t border-gray-900/5 px-6 pt-6">
                 <dt class="flex-none">
