@@ -6,6 +6,9 @@ __pycache__/
 **/alembic/versions/*
 **/uploads/*
 
+# test data
+polling-backend/experiments/*
+
 # Secrets
 *.secret
 

@@ -14,14 +14,11 @@ ENV PYTHONUNBUFFERED 1
 RUN apt -y update \
     && apt -y install postgresql-client-16 python3-dev netcat
 
-# lint
+# int
 RUN pip install --upgrade pip
-#RUN pip install flake8==3.9.2
+# RUN pip install flake8==3.9.2
 # COPY . .
-# for older projects the linter will take forever in
-# in the migration, perhaps if we get millions of dollars
-# from Cardigan it's worth a rewrite.
-#RUN flake8 --ignore=E501,F401
+# RUN flake8 --ignore=E501,F401
 
 # install app dependencies
 COPY ./requirements.txt .
