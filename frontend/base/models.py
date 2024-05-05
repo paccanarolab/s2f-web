@@ -1,6 +1,7 @@
 import uuid
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from typing import Dict
 
 
 class Status(models.TextChoices):
@@ -22,6 +23,14 @@ class Job(models.Model):
     fasta_file = models.TextField()
     annotation_file = models.TextField()
     result_file = models.TextField()
+
+    def get_dict(self) -> Dict:
+        return {
+            "alias": self.alias,
+            "email": self.email,
+            "token": self.token,
+            "status": self.status,
+        }
 
 
 class JobEvent(models.Model):

@@ -110,21 +110,17 @@ def ping(request):
 @rw_protected_resource()
 def pending_jobs(request):
     context = {}
-    jobs = Job.objects.filter(status=Status.CREATED).values("token", "alias")
-    context["jobs"] = [j for j in jobs]
+    jobs = Job.objects.filter(status=Status.CREATED)
+    context["jobs"] = [j.get_dict() for j in jobs]
     return JsonResponse(context)
 
 
 @rw_protected_resource()
-def job_files(request, token):
-    context = {}
+def job_details(request, token):
     success, job = get_job_or_json404(token)
     if not success:
         return job
-    context["fasta_file"] = job.fasta_file
-    context["annotation_file"] = job.annotation_file
-    context["annotation_file"] = job.result_file
-    return JsonResponse(context)
+    return JsonResponse(job.get_dict())
 
 
 def download_job_file(path):
@@ -159,8 +155,29 @@ def job_annot(request, token):
 
 @csrf_exempt
 @rw_protected_resource()
-def job_update(request):
+def job_update_result(request):
     context = {}
+    status_code = 200
+    if request.method == "POST":
+        token = request.POST["token"]
+        url = request.POST["url"]
+        success, job = get_job_or_json404(token)
+        if not success:
+            return job
+        job.result_file = url
+        job.save()
+        context["message"] = "successfully changed the result URL"
+    if "message" not in context:
+        context["message"] = "something went wrong!"
+        status_code = 409
+    return JsonResponse(context, status=status_code)
+
+
+@csrf_exempt
+@rw_protected_resource()
+def job_update_status(request):
+    context = {}
+    status_code = 200
     if request.method == "POST":
         token = request.POST["token"]
         status = request.POST["status"]
@@ -174,6 +191,7 @@ def job_update(request):
             (Status.JOINED, Status.EXPIRED),
             (Status.STARTED, Status.FINISHED),
             (Status.STARTED, Status.FAILED),
+            (Status.FINISHED, Status.EXPIRED),
         ]
 
         for start, end in valid_transitions:
@@ -187,7 +205,8 @@ def job_update(request):
                 context["message"] = "successfully changed the status"
         if "message" not in context:
             context["message"] = f"can't change from {current} to {status}"
-    return JsonResponse(context)
+            status_code = 409
+    return JsonResponse(context, status=status_code)
 
 
 def job(request, token):

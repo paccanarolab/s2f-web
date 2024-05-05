@@ -3,12 +3,14 @@ from oauthlib.oauth2 import BackendApplicationClient, TokenExpiredError
 from requests_oauthlib import OAuth2Session
 from datetime import datetime
 from pathlib import Path
+import logging
 
 
+logger = logging.getLogger(__name__)
 API_URL = "https://localhost"
 PADDING_SECONDS = 10
-CLIENT_ID = "Nn5yWZQw5JLOF5RvXrzsOWgVieMo8VjEAin3nTzu"
-CLIENT_SECRET = "Z58yafK76EOuZearQLmK7wpRTFQ6sJVIYIxhEtpdBSJb18WKZzSAf0aI66XMxAaQFa0u8SyMJpIVPnMZ99te41DkCDKrnnNqWDFfPymSIcrw1UgBYHLuKRifqDAFWORB"
+CLIENT_ID = "kMq0SjRpz1YoIIl4eiTAM9xEyucsLhdDE6MEXNsy"
+CLIENT_SECRET = "67sJWtY78WkMCPVlAmLQB6REFFWuyLlVPqbRxFWWkaOYnlbo3ydgrv3jeUEzrMNtOtzfyactTAi9172EIwkzQexc1Z4S2sawHwzNQLIapIwd3fe3HZRgK9zjfqluDp9y"
 TOKEN = {}
 CLIENT = None
 
@@ -20,19 +22,18 @@ def _refresh_token():
                                client_secret=CLIENT_SECRET)
     c = BackendApplicationClient(client_id=CLIENT_ID)
     CLIENT = OAuth2Session(client=c, token=TOKEN)
-    print("refreshed token")
+    logger.info("refreshed token")
 
 
 def _ensure_authenticated():
     try:
         delta = TOKEN["expires_at"] - datetime.now().timestamp()
-        print(f"{delta=}")
         if delta < PADDING_SECONDS:
             _refresh_token()
         r = CLIENT.get(f"{API_URL}/api/ping")
         d = r.json()
     except TokenExpiredError:
-        print("except")
+        logger.info("Token expired")
         _refresh_token()
         r = CLIENT.get(f"{API_URL}/api/ping")
         d = r.json()
@@ -55,9 +56,9 @@ def get_job_list() -> Dict:
     return r.json()
 
 
-def get_job_files(job) -> Dict:
+def get_job_details(job) -> Dict:
     _ensure_authenticated()
-    r = CLIENT.get(f'{API_URL}/api/job_files/{job["token"]}')
+    r = CLIENT.get(f'{API_URL}/api/job_details/{job["token"]}')
     return r.json()
 
 
@@ -76,11 +77,23 @@ def download_fasta_file(job, fasta_dir) -> Path | None:
             return None
 
 
-def joined_job(job):
+def update_job_status(job, status):
     _ensure_authenticated()
     r = CLIENT.post(f"{API_URL}/api/update_job_status",
                     data={
                         "token": job["token"],
-                        "status": "jo"
+                        "status": status
                         })
-    print(r.text)
+    if r.status_code != 200:
+        logger.error(r.text)
+    return r.status_code == 200
+
+
+def update_job_result(job, url):
+    _ensure_authenticated()
+    r = CLIENT.post(f"{API_URL}/api/update_job_result",
+                    data={
+                        "token": job["token"],
+                        "url": url
+                        })
+    return r.status_code == 200

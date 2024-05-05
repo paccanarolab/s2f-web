@@ -37,45 +37,46 @@ services:
       - ./env.s2f-front-db.secret
     networks:
       - s2f
-  proxy:
-    build: ./reverse-proxy
-    volumes:
-      - ./reverse-proxy/default.conf:/etc/nginx/conf.d/nginx.conf
-      - ./reverse-proxy/certs:/etc/nginx/ssl
-      - ./frontend/static:/home/app/staticfiles
-    networks:
-      - s2f
-    ports:
-      - 80:80
-      - 443:443
-    depends_on:
-      - s2f-front
+  # Proxy server (used locally only)
+  # proxy:
+  #   build: ./reverse-proxy
+  #   volumes:
+  #     - ./reverse-proxy/default.conf:/etc/nginx/conf.d/nginx.conf
+  #     - ./reverse-proxy/certs:/etc/nginx/ssl
+  #     - ./frontend/static:/home/app/staticfiles
+  #   networks:
+  #     - s2f
+  #   ports:
+  #     - 80:80
+  #     - 443:443
+  #   depends_on:
+  #     - s2f-front
   # Back end
-  s2f-back:
-    build: 
-      context: ./polling-backend
-      dockerfile: Dockerfile.prod
-    command: python client_main.py
-    env_file: 
-      - ./env.backend.secret
-    networks:
-      - s2f
-    depends_on:
-      s2f-back-db:
-        condition: service_healthy
-  s2f-back-db:
-    image: postgres:16.6-alpine
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
-      interval: 30s
-      timeout: 5s
-      retries: 10 # this might seem too many retries, but there is data being copied...
-    volumes:
-      - s2f-back-db_data:/var/lib/postgresql/data/
-    env_file:
-      - ./env.s2f-back-db.secret
-    networks:
-      - s2f
+  # s2f-back:
+  #   build: 
+  #     context: ./polling-backend
+  #     dockerfile: Dockerfile.prod
+  #   command: python client_main.py
+  #   env_file: 
+  #     - ./env.backend.secret
+  #   networks:
+  #     - s2f
+  #   depends_on:
+  #     s2f-back-db:
+  #       condition: service_healthy
+  # s2f-back-db:
+  #   image: postgres:16.6-alpine
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready"]
+  #     interval: 30s
+  #     timeout: 5s
+  #     retries: 10 # this might seem too many retries, but there is data being copied...
+  #   volumes:
+  #     - s2f-back-db_data:/var/lib/postgresql/data/
+  #   env_file:
+  #     - ./env.s2f-back-db.secret
+  #   networks:
+  #     - s2f
 networks:
   s2f:
     name: s2f
@@ -83,5 +84,5 @@ networks:
 
 volumes:
   s2f-front-db_data:
-  s2f-back-db_data:
+  # s2f-back-db_data:
   static_s2f:
