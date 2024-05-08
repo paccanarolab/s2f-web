@@ -13,6 +13,7 @@ services:
       - ./frontend/base:/home/app/frontend/base
       - ./frontend/frontend:/home/app/frontend/frontend
       - ./data:/home/app/data
+      - ./aws-credentials.secret:/home/app/.aws/credentials:ro
     # uncomment these to access the app directly for test purposes, 
     # but expect everything to be broken.
     ports:

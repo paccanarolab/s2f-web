@@ -12,7 +12,7 @@ from pathlib import Path
 from oauth2_provider.decorators import rw_protected_resource
 from django.views.decorators.csrf import csrf_exempt
 import logging
-import json
+from base.mail import send_email, EMAIL_TEMPLATES
 
 
 log = logging.getLogger("main")
@@ -76,7 +76,12 @@ def add_job(request):
         event = JobEvent.objects.create(job=job,
                                         date=creation_dt)
         event.save()
-        print(job)
+        email_body = EMAIL_TEMPLATES["experiment_created"]["body"].format(
+            alias=alias,
+            date=datetime.now().strftime("%d-%B-%Y"),
+            token=job.token)
+        subject = EMAIL_TEMPLATES["experiment_created"]["subject"]
+        send_email(email, email_body, subject)
         return redirect(f"job/{job.token}")
     redirect("search")
 
@@ -193,7 +198,7 @@ def job_update_status(request):
             (Status.STARTED, Status.FAILED),
             (Status.FINISHED, Status.EXPIRED),
         ]
-
+        notify = False 
         for start, end in valid_transitions:
             if current == start and status == end:
                 job.status = status
@@ -203,6 +208,20 @@ def job_update_status(request):
                                                 date=datetime.now())
                 event.save()
                 context["message"] = "successfully changed the status"
+                if status == Status.STARTED:
+                    notify = True
+                    template = "experiment_started"
+                elif status == Status.FINISHED:
+                    notify = True
+                    template = "experiment_finished"
+                if notify:
+                    date = datetime.now().strftime("%d-%B-%Y")
+                    email_body = (EMAIL_TEMPLATES[template]["body"]
+                                  .format(alias=job.alias,
+                                          date=date,
+                                          token=job.token))
+                    subject = EMAIL_TEMPLATES[template]["subject"]
+                    send_email(job.email, email_body, subject)
         if "message" not in context:
             context["message"] = f"can't change from {current} to {status}"
             status_code = 409
