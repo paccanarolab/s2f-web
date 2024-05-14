@@ -30,7 +30,7 @@ EMAIL_TEMPLATES = {
                 24 hours.</p>
 
                 <p>This is the link to your experiment:
-                https://paccanarolab.org/s2f_service/{token}</p>
+                https://paccanarolab.org/s2f_service/job/{token}</p>
 
                 <p>This is a no-reply e-mail and it is not actively monitored,
                 please visit https://paccanarolab.org/s2f if you have any
@@ -62,7 +62,7 @@ EMAIL_TEMPLATES = {
                 24 hours.</p>
 
                 <p>This is the link to your experiment:
-                https://paccanarolab.org/s2f_service/{token}</p>
+                https://paccanarolab.org/s2f_service/job/{token}</p>
 
                 <p>This is a no-reply e-mail and it is not actively monitored,
                 please visit https://paccanarolab.org/s2f if you have any
@@ -93,7 +93,7 @@ EMAIL_TEMPLATES = {
                 24 hours.</p>
 
                 <p>This is the link to your experiment:
-                https://paccanarolab.org/s2f_service/{token}</p>
+                https://paccanarolab.org/s2f_service/job/{token}</p>
 
                 <p>This is a no-reply e-mail and it is not actively monitored,
                 please visit https://paccanarolab.org/s2f if you have any

@@ -190,7 +190,9 @@ MEDIA_ROOT = BASE_DIR / 'uploads'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
+FORCE_SCRIPT_NAME = os.environ.get("FRONT_FORCE_SCRIPT_NAME",
+                                   default="/s2f_service/")
+USE_X_FORWARDED_HOST = True
 # Login and CORS
 
 LOGIN_URL = '/admin/login/'
