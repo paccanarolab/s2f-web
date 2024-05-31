@@ -1,9 +1,7 @@
 from pathlib import Path
 from s2f_client.core import commands
-import logging
+import s2f_client.core.settings as settings
 
-
-MEDIA_ROOT = Path(__file__).parent / "experiments"
 
 if __name__ == "__main__":
     import argparse
@@ -18,14 +16,14 @@ if __name__ == "__main__":
     # progress on all jobs
     step_jobs = subparsers.add_parser(
         "step",
-        help="Loads all the local jobs and steps through each of them",
+        help="Loads all the local jobs and steps through each of them.",
     )
 
     step_jobs.set_defaults(func=commands.step_all_jobs)
     step_jobs.add_argument("-r", "--media-root",
                            help="Path to the directory where jobs are stored",
                            type=Path,
-                           default=MEDIA_ROOT)
+                           default=settings.MEDIA_ROOT)
 
     # delete all azure containers
     delete_all_containers = subparsers.add_parser(
@@ -44,8 +42,4 @@ if __name__ == "__main__":
     # Parse the arguments and route the function call
     args = parser.parse_args()
 
-    try:
-        args.func(args)
-    except AttributeError as e:
-        print(e)
-        parser.parse_args(['--help'])
+    args.func(args)

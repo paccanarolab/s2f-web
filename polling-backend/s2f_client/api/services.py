@@ -4,13 +4,15 @@ from requests_oauthlib import OAuth2Session
 from datetime import datetime
 from pathlib import Path
 import logging
+import os
 
 
 logger = logging.getLogger(__name__)
-API_URL = "https://localhost"
+API_URL = os.getenv("S2F_API_URL", "https://localhost")
+print(API_URL)
 PADDING_SECONDS = 10
-CLIENT_ID = "kMq0SjRpz1YoIIl4eiTAM9xEyucsLhdDE6MEXNsy"
-CLIENT_SECRET = "67sJWtY78WkMCPVlAmLQB6REFFWuyLlVPqbRxFWWkaOYnlbo3ydgrv3jeUEzrMNtOtzfyactTAi9172EIwkzQexc1Z4S2sawHwzNQLIapIwd3fe3HZRgK9zjfqluDp9y"
+CLIENT_ID = os.getenv("S2F_CLIENT_ID")
+CLIENT_SECRET = os.getenv("S2F_CLIENT_SECRET")
 TOKEN = {}
 CLIENT = None
 
@@ -44,7 +46,7 @@ def init_api():
     global CLIENT, TOKEN
     c = BackendApplicationClient(client_id=CLIENT_ID)
     CLIENT = OAuth2Session(client=c)
-    TOKEN = CLIENT.fetch_token(token_url='https://localhost/o/token/',
+    TOKEN = CLIENT.fetch_token(token_url=f"{API_URL}/o/token/",
                                client_id=CLIENT_ID,
                                client_secret=CLIENT_SECRET)
     CLIENT = OAuth2Session(client=c, token=TOKEN)
@@ -67,7 +69,8 @@ def download_fasta_file(job, fasta_dir) -> Path | None:
     url = f'{API_URL}/api/job_fasta/{job["token"]}'
     with CLIENT.get(url, stream=True) as r:
         if r.status_code == 200:
-            filename = r.headers["Content-Disposition"].split("=")[1]
+            # filename = r.headers["Content-Disposition"].split("=")[1]
+            filename = "input.fasta"
             fasta_path = fasta_dir / filename
             with fasta_path.open("wb") as fasta:
                 for chunk in r.iter_content(512):

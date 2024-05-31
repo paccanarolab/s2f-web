@@ -59,6 +59,7 @@ def delete_all_containers():
 
 
 def list_all_containers():
+    logger.info(CONNECT_STR)
     blob_service_client = BlobServiceClient.from_connection_string(CONNECT_STR)
 
     for container in blob_service_client.list_containers():
