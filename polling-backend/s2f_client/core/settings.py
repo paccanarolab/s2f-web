@@ -4,8 +4,9 @@ from pathlib import Path
 
 # This is the directory where fasta files are downloaded from the submission
 # server, and also cotains the manager status file and log files.
-MEDIA_ROOT = os.getenv("S2F_MEDIA_ROOT",
-                       Path(__file__).parent.parent.parent / "experiments")
+MEDIA_ROOT = Path(
+    os.getenv("S2F_MEDIA_ROOT",
+              str(Path(__file__).parent.parent.parent / "experiments")))
 
 # This is the S2F main configuration file, indicating where the installation
 # directory is located
