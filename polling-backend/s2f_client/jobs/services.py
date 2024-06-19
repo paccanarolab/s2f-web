@@ -35,7 +35,7 @@ obo = {obo}
 fasta = {fasta}
 
 [functions]
-unattended
+unattended = yes
 """
     directory = settings.MEDIA_ROOT / job["token"]
     obo_file = settings.MEDIA_ROOT / "data" / "go.obo"
