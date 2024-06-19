@@ -47,7 +47,7 @@ EMAIL_TEMPLATES = {
         "body": """<html>
             <head></head>
             <body>
-                <h1>Experiment Successfully Registered</h1>
+                <h1>Experiment Started Running</h1>
 
                 <p>Thanks for using the S2F prediction service,</p>
 
