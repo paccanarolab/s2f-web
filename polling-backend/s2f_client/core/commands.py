@@ -3,6 +3,7 @@ from s2f_client.azure_api import services as az_api
 from s2f_client.jobs import services as job_manager
 from s2f_client.tools import log
 import logging
+import sys
 
 log.setup_logger("s2f_client")
 
@@ -15,6 +16,7 @@ def step_all_jobs(args):
     status = job_manager.get_manager_status()
     if status != "IDLE":
         logger.info(f"Skipped this step because manager status is {status}")
+        sys.exit(0)
     job_manager.set_manager_status("RUNNING")
 
     JOBS = []
