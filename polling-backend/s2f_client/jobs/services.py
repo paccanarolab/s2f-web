@@ -33,6 +33,9 @@ config_file = {s2f_conf}
 alias = {alias}
 obo = {obo}
 fasta = {fasta}
+
+[functions]
+unattended
 """
     directory = settings.MEDIA_ROOT / job["token"]
     obo_file = settings.MEDIA_ROOT / "data" / "go.obo"
