@@ -57,7 +57,7 @@ def make_prediction(job) -> bool:
     make_s2f_run_config(job)
     # run s2f predict command
     logger.info(f"running S2F with {job['token']} file")
-    cmd = f"python {settings.S2F_ENTRY} --run-config {run_config}"
+    cmd = f"python {settings.S2F_ENTRY} predict --run-config {run_config}"
     subprocess.run(cmd, shell=True)
     # retrieve results
     with prediction_file.open("w") as outf:
