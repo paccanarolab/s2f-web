@@ -12,6 +12,11 @@
 {% block content %}
 <form method="post" action="{{ url('new-experiment') }}" enctype="multipart/form-data">
     {{ csrf_input }}
+    <div class="my-10">
+        <p>
+            This tool is freely accessible to all users, including commercial users
+        </p>
+    </div>
     <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
         <div class="sm:col-span-3">
             <label for="alias" class="block text-sm font-medium leading-6 text-gray-900">Prediction alias</label>
