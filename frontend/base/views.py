@@ -33,10 +33,11 @@ def add_job(request):
         try:
             validation = validate_email(request.POST["email"])
             email = validation.email
-        except EmailNotValidError as e:
-            response = HttpResponseBadRequest()
-            response.write(e)
-            return response
+        except EmailNotValidError:
+            email = "noemail@noemail.com"
+            # response = HttpResponseBadRequest()
+            # response.write(e)
+            # return response
         creation_dt = datetime.now()
         creation_str = creation_dt.strftime('%Y_%m_%d-%H_%M_%S')
         upload_dir = MEDIA_ROOT / f"{creation_str}-{alias}"
@@ -81,7 +82,8 @@ def add_job(request):
             date=datetime.now().strftime("%d-%B-%Y"),
             token=job.token)
         subject = EMAIL_TEMPLATES["experiment_created"]["subject"]
-        send_email(email, email_body, subject)
+        if email != "noemail@noemail.com":
+            send_email(email, email_body, subject)
         return redirect(f"job/{job.token}")
     redirect("search")
 
