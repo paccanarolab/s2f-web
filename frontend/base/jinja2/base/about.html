@@ -9,15 +9,37 @@
     {{ nav.nav_links(active) }}
 {% endblock %}
 
-{#% block header %}
-{% endblock %#}
+{% block header %}
+<div class="headerContainer">
+    <a href="https://www.royalholloway.ac.uk/" target="_blank" rel="noopener noreferrer" class="royalHollowayImage">
+        <img src="https://www.royalholloway.ac.uk/images/logoRoyalHolloway2x.png" alt="Royal Holloway University of London" style="width: 100%; height: 100%; object-fit: contain; padding: 0 10px;">
+    </a>
+    <div class="dialogTitle">
+        <h1 class="text-3xl font-bold leading-tight tracking-tight text-gray-900 m-0">
+            Welcome to S2F Web
+        </h1>
+        <h2 class="text-base font-semibold leading-tight tracking-tight text-gray-800 m-0">
+            Protein Function Prediction for newly sequenced organisms
+        </h2>
+    </div>
+    <a href="https://emap.fgv.br/en" target="_blank" rel="noopener noreferrer" class="fundacionImage">
+        <img src="https://emap.fgv.br/sites/default/themes/custom/emap/logo.svg" alt="FGV EMAP" style="width: 100%; height: 100%; object-fit: contain; padding: 0 10px;">
+    </a>
+</div>
+<p class="max-w-4xl text-center text-sm text-gray-700">
+    S2F Web is a web server that allows users to predict protein functions for newly sequenced organisms using the S2F (Sequence to Function) method.    
+</p>
+<p class="max-w-4xl text-center text-sm text-gray-700">
+    Developed by Paccanaro Lab
+</p>
+{% endblock %}
 
 {% block content %}
 <div class="pt-20">
     <h3 class="text-2xl font-semibold leading-6 text-gray-900">References:</h3>
     <div class="my-10">
         <p>
-            If you found S2F-web useful for your work or research, please let us know, and cite the following articles:
+            If you found S2F Web useful for your work or research, please let us know, and cite the following articles:
         </p>
         <ul role="list" class="mt-8 space-y-8 text-gray-600">
             <li class="flex gap-x-3">
@@ -28,7 +50,7 @@
                 </svg>
 
                 <span>
-                    Torres, M., and Paccanaro, A.<br>
+                    Torres, M., Báez, M. and Paccanaro, A.<br>
                     <a href="#"
                        class="font-semibold text-indigo-600 hover:text-indigo-400">S2F-web, network-based protein function prediction</a>
                     <span class="italic">In preparation</span>
@@ -82,23 +104,6 @@
             <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">v2.8.1</dd>
         </div>
     </dl>
-    <div class="py-24 sm:py-32">
-        <h3 class="text-2xl font-semibold leading-6 text-gray-900 pb-6">S2F-web was developed with the support of:</h3>
-        <div class="mx-auto max-w-7xl px-6 lg:px-8">
-            <div class="-mx-6 grid grid-cols-2 gap-0.5 overflow-hidden sm:mx-0 sm:rounded-2xl md:grid-cols-3">
-                <div class="bg-gray-50 p-8 sm:p-10">
-                    <img class="max-h-12 w-full object-contain" src='{{ static("img/fgv-logo.svg") }}' alt="FGV" width="158" height="48">
-                </div>
-                <div class="bg-gray-50 p-3 sm:p-8">
-                    <img class="max-h-20 w-full object-contain" src='{{ static("img/rhul.jpg") }}' alt="Reform" width="158" height="48">
-                </div>
-                <div class="bg-gray-50 p-6 sm:p-10">
-                    <img class="max-h-12 w-full object-contain" src='{{ static("img/paccanarolab.svg") }}' alt="Tuple" width="158" height="48">
-                </div>
-            </div>
-        </div>
-    </div>
-
 </div>
 
 {% endblock %}
