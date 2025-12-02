@@ -1,6 +1,36 @@
 {% import 'base/components/nav-links.html' as nav %}
 {% extends 'base.html' %}
 
+{% block head %}
+<style>
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    .form-left,
+    .form-right {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    @media (min-width: 768px) {
+        .form-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+        .form-left {
+            grid-column: 1;
+        }
+        .form-right {
+            grid-column: 2;
+            justify-self: end;
+            max-width: 28rem;
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block nav %}
     {{ nav.nav_links(active) }}
 {% endblock %}
@@ -9,84 +39,105 @@
     {{ nav.nav_links(active) }}
 {% endblock %}
 
+{% block header %}
+<div class="headerContainer">
+    <a href="https://www.royalholloway.ac.uk/" target="_blank" rel="noopener noreferrer" class="royalHollowayImage">
+        <img src="https://www.royalholloway.ac.uk/images/logoRoyalHolloway2x.png" alt="Royal Holloway University of London" style="width: 100%; height: 100%; object-fit: contain; padding: 0 10px;">
+    </a>
+    <div class="dialogTitle">
+        <h1 class="text-3xl font-bold leading-tight tracking-tight text-gray-900 m-0">
+            Welcome to S2F Web
+        </h1>
+        <h2 class="text-base font-semibold leading-tight tracking-tight text-gray-800 m-0">
+            Protein Function Prediction for newly sequenced organisms
+        </h2>
+    </div>
+    <a href="https://emap.fgv.br/en" target="_blank" rel="noopener noreferrer" class="fundacionImage">
+        <img src="https://emap.fgv.br/sites/default/themes/custom/emap/logo.svg" alt="FGV EMAP" style="width: 100%; height: 100%; object-fit: contain; padding: 0 10px;">
+    </a>
+</div>
+<p class="max-w-4xl text-center text-sm text-gray-700">
+    S2F Web is a web server that allows users to predict protein functions for newly sequenced organisms using the S2F (Sequence to Function) method.    
+</p>
+<p class="max-w-4xl text-center text-sm text-gray-700">
+    Developed by Paccanaro Lab
+</p>
+{% endblock %}
+
 {% block content %}
 <form method="post" action="{{ url('new-experiment') }}" enctype="multipart/form-data">
     {{ csrf_input }}
-    <div class="my-10">
-        <p>
-            This tool is freely accessible to all users, including commercial users
-        </p>
-    </div>
-    <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-        <div class="sm:col-span-3">
-            <label for="alias" class="block text-sm font-medium leading-6 text-gray-900">Prediction alias</label>
-            <div class="mt-2">
-                <input type="text" name="alias" id="alias"
-                       class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+    <div class="mt-10 form-grid">
+        <div class="form-left rounded-xl border border-gray-200 bg-gray-50 p-6 shadow-sm flex flex-col justify-center">
+            <div class="text-left">
+                <label for="alias" class="block text-sm font-semibold leading-6 text-gray-900">Prediction alias</label>
+                <div class="mt-2">
+                    <input type="text" name="alias" id="alias"
+                           class="block w-full rounded-xl border border-gray-300 px-4 py-2 text-gray-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
+                </div>
+            </div>
+            <div class="text-left">
+                <label for="email" class="mt-4 block text-sm font-semibold leading-6 text-gray-900">Email address (optional)</label>
+                <div class="mt-2">
+                    <input id="email" name="email" type="email" autocomplete="email"
+                           class="block w-full rounded-xl border border-gray-300 px-4 py-2 text-gray-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
+                </div>
             </div>
         </div>
-
-        <div class="sm:col-span-3">
-            <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address (optional)</label>
-            <div class="mt-2">
-                <input id="email" name="email" type="email" autocomplete="email"
-                       class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+        <div class="form-right rounded-xl border border-gray-200 bg-gray-50 p-6 shadow-sm flex flex-col justify-center">
+            <div class="text-center">
+                <label for="fasta-file" class="block text-sm font-semibold leading-6 text-gray-900">Upload FASTA file</label>
+                <p class="text-sm text-gray-700">You may upload a file with up to 5000 proteins. Proteins that exceed this limit will be ignored by the system.</p>
+                <div class="mt-3 flex justify-center">
+                    <label for="fasta-file" class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 16V4m0 0 4 4m-4-4-4 4m-2 5.5v3a2.5 2.5 0 0 0 2.5 2.5h7a2.5 2.5 0 0 0 2.5-2.5v-3"/>
+                        </svg>
+                        <span>Upload FASTA</span>
+                    </label>
+                    <input id="fasta-file" type="file" name="fasta-file" class="sr-only">
+                </div>
+            </div>
+            <div class="text-center">
+                <label for="annotation-file" class="mt-4 block text-sm font-semibold leading-6 text-gray-900">
+                    Functional annotations (optional)
+                </label>
+                <p class="text-sm text-gray-700">Annotations in this file will be used as ground truth by the method, and will be enforced.</p>
+                <p class="text-xs text-gray-600">Format: tab separated file with the protein identifier in the first column and the GO term identifier in the second column.</p>
+                <div class="mt-3 flex justify-center">
+                    <label for="annotation-file" class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 16V4m0 0 4 4m-4-4-4 4m-2 5.5v3a2.5 2.5 0 0 0 2.5 2.5h7a2.5 2.5 0 0 0 2.5-2.5v-3"/>
+                        </svg>
+                        <span>Upload annotations</span>
+                    </label>
+                    <input id="annotation-file" type="file" name="annotation-file" class="sr-only">
+                </div>
             </div>
         </div>
-        
-        <div class="sm:col-span-6">
-            <label for="fasta-file" class="block text-sm font-medium leading-6 text-gray-900">Upload FASTA file</label>
-            <p>You may upload a file with up to 5000 proteins.</p>
-            <p>Proteins that exceed this limit will be ignored by the system.</p>
-            <input id="fasta-file" type="file" name="fasta-file"
-                   class="w-full text-gray-900 font-semibold text-sm bg-white border
-                          file:cursor-pointer cursor-pointer file:border-0
-                          ring-1 ring-inset ring-gray-300
-                          file:py-2 file:px-4 file:mr-4 file:bg-gray-100
-                          file:ring-gray-300 file:ring-1 file:ring-inset
-                          file:hover:bg-gray-200 file:text-gray-900 rounded-md">
-
-        </div>
-        <div class="sm:col-span-6">
-            <label for="annotation-file" class="block text-sm font-medium leading-6 text-gray-900">
-                Functional annotations (optional)
-            </label>
-            <p>Annotations in this file will be used as ground truth by the method, and will be enforced.</p>
-            <p>The format of this file should be a tab separated file, with the protein identifier in the first column, and the GO term identifier in the second column (see example below):</p>
-            <pre>
-Protein 1    GO:0000001
-Protein 2    GO:0000001
-Protein 3    GO:0000002
-Protein 4    GO:0000003
-Protein 5    GO:0000004</pre>
-            <input id="annotation-file" type="file" name="annotation-file"
-                   class="w-full text-gray-900 font-semibold text-sm bg-white border
-                          file:cursor-pointer cursor-pointer file:border-0
-                          ring-1 ring-inset ring-gray-300
-                          file:py-2 file:px-4 file:mr-4 file:bg-gray-100
-                          file:ring-gray-300 file:ring-1 file:ring-inset
-                          file:hover:bg-gray-200 file:text-gray-900 rounded-md">
-
-        </div>
     </div>
+    
     <div class="w-full text-center">
-    <button
-        type="submit"
-        class="rounded-md
-               mx-auto 
-               my-8
-               w-3/4
-               bg-indigo-600
-               px-3 py-2
-               text-sm font-semibold
-               text-white shadow-sm
-               hover:bg-indigo-500
-               focus-visible:outline
-               focus-visible:outline-2
-               focus-visible:outline-offset-2
-               focus-visible:outline-indigo-600">
-        Add experiment to queue
-    </button>
+        <p class="max-w-4xl text-center text-sm text-gray-700">
+            This tool is freely accessible to all users, including commercial users. We don't use any cookies or tracking tools.
+        </p>
+        <button
+            type="submit"
+            class="rounded-md
+                mx-auto 
+                my-8
+                w-40
+                bg-indigo-600
+                px-3 py-1.5
+                text-sm font-semibold
+                text-white shadow-sm
+                hover:bg-indigo-500
+                focus-visible:outline
+                focus-visible:outline-2
+                focus-visible:outline-offset-2
+                focus-visible:outline-indigo-600">
+            Add your experiment to queue
+        </button>
     </div>
 </form>
 
