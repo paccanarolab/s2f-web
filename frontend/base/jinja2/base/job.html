@@ -50,7 +50,7 @@
                 </dt>
                 <dd class="text-sm leading-6 text-gray-500">{{ job.alias }}</dd>
             </div>
-            {% if job.result_file != "" %}
+            {% if job.result_file != "" and job.status != "ex" %}
             <div class="mt-4 flex w-full flex-none gap-x-4 px-6">
                 <dt class="flex-none">
                     <span class="sr-only">Result URL</span>
