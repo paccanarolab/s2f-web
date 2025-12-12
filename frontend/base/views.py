@@ -245,8 +245,3 @@ def results(request):
 def about(request):
     context = {"active": "about"}
     return render(request, "base/about.html", context)
-
-
-def help(request):
-    context = {"active": "help"}
-    return render(request, "base/help.html", context)
