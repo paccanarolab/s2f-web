@@ -21,13 +21,13 @@
 {% block content %}
 <form method="post" action="{{ url('search') }}" enctype="multipart/form-data" class="max-w-xl mx-auto">
     {{ csrf_input }}
-    <div class="mt-10 rounded-xl border border-gray-200 bg-gray-50 p-6 shadow-sm">
+    <div class="mt-10 rounded-xl border border-gray-200 bg-gray-50 p-6 shadow-sm space-y-6">
         <label for="token" class="block text-sm font-semibold leading-6 text-gray-900">Token</label>
         <div class="mt-2">
             <input type="text" name="token" id="token"
                    class="block w-full rounded-xl border border-gray-300 px-4 py-2 text-gray-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
         </div>
-        <div class="w-full text-center">
+        <div class="w-full text-center pt-4">
             <button
                 type="submit"
                 class="rounded-md
