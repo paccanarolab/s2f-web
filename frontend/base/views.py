@@ -247,6 +247,6 @@ def about(request):
     return render(request, "base/about.html", context)
 
 
-def help_page(request):
+def help(request):
     context = {"active": "help"}
     return render(request, "base/help.html", context)
