@@ -14,6 +14,28 @@
         flex-direction: column;
         gap: 1.5rem;
     }
+    /* Modal overlay sits above the full viewport with a dimmed backdrop */
+    #summary-modal {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(2px);
+        z-index: 9999;
+    }
+    #summary-modal.is-open {
+        display: flex;
+    }
+    #summary-modal .modal-card {
+        width: min(960px, calc(100% - 2rem));
+        max-height: 90vh;
+        overflow: auto;
+        border-radius: 1.25rem;
+        box-shadow: 0 20px 45px -12px rgba(0, 0, 0, 0.35);
+    }
     @media (min-width: 768px) {
         .form-grid {
             grid-template-columns: 1fr 1fr;
@@ -163,12 +185,12 @@
     </div>
 </form>
 
-<div id="summary-modal" class="fixed inset-0 hidden items-center justify-center bg-black bg-opacity-50 px-4" style="z-index: 9999;">
-    <div class="w-full max-w-lg rounded-2xl bg-white shadow-2xl">
+<div id="summary-modal">
+    <div class="modal-card w-full bg-white rounded-xl" role="dialog" aria-modal="true" aria-labelledby="summary-modal-title">
         <div class="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
             <div>
                 <p class="text-xs uppercase tracking-wide text-gray-500">Confirm submission</p>
-                <h3 class="text-lg font-semibold text-gray-900">Review your experiment</h3>
+                <h3 id="summary-modal-title" class="text-lg font-semibold text-gray-900">Review your experiment</h3>
             </div>
             <button type="button" id="close-summary" class="rounded-full p-2 text-gray-500 hover:bg-gray-100">
                 <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -194,7 +216,11 @@
                 <span id="summary-annot" class="text-gray-700">No file selected</span>
             </div>
         </div>
+        
         <div class="flex items-center justify-end gap-3 border-t border-gray-200 px-6 py-4">
+            <p class="max-w-4xl  text-sm text-gray-700">
+            <strong>NOTICE:</strong> Experiments with 4000 proteins or less, it should be ready within 40 hours. Larger experiments may take longer (5000 proteins around 2 days and a half).
+            </p>
             <button type="button" id="cancel-summary" class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50">
                 Cancel
             </button>
@@ -249,13 +275,11 @@
                 summary.email.textContent = emailInput?.value?.trim() || 'Not provided';
                 summary.fasta.textContent = (fastaInput?.files?.[0]?.name) || 'No file selected';
                 summary.annot.textContent = (annotInput?.files?.[0]?.name) || 'No file selected';
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
+                modal.classList.add('is-open');
                 document.body.classList.add('overflow-hidden');
             };
             const hideModal = () => {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
+                modal.classList.remove('is-open');
                 document.body.classList.remove('overflow-hidden');
             };
             openBtn.addEventListener('click', (e) => {
